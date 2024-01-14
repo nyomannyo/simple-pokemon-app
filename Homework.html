@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax</title>
+</head>
+
+<body>
+
+    <h1>Data Pokemon</h1>
+
+    <label for="input_pokemon">Nama Pokemon: </label>
+    <input type="text" id="input_pokemon" placeholder="Tulis Nama Pokemon" /> <br /><br />
+
+    <button onclick="getPokemon();">Generate</button>
+    <br /><br />
+
+    <hr />
+    <h1>Hasil: </h1>
+
+    <table>
+        <tr>
+            <td>Active Cases</td>
+            <td>:</td>
+            <td id="activecases"></td>
+        </tr>
+        <tr>
+            <td>New Cases</td>
+            <td>:</td>
+            <td id="newcases"></td>
+        </tr>
+        <tr>
+            <td>Recovered Case</td>
+            <td>:</td>
+            <td id="recoveredcase"></td>
+        </tr>
+        <tr>
+            <td>Total Case</td>
+            <td>:</td>
+            <td id="totalcase"></td>
+        </tr>
+        <tr>
+            <td>Total Deaths</td>
+            <td>:</td>
+            <td id="totaldeaths"></td>
+        </tr>
+        <tr>
+            <td>Total Tests</td>
+            <td>:</td>
+            <td id="totaltest"></td>
+        </tr>
+
+    </table>
+
+    <script>
+        function getPokemon() {
+            let keyword = document.getElementById('input_pokemon').value;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': '3dbc48e6c6msh80ca3d025eda273p18d06bjsn8a07d16cfdbd',
+                    'X-RapidAPI-Host': 'covid-193.p.rapidapi.com'
+                }
+            }
+
+            fetch('https://covid-193.p.rapidapi.com/statistics?country=' + keyword.toLowerCase(), options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.response[0]);
+                    console.log(data.response[0].cases.active);
+                    console.log(data.response[0].cases.new);
+                    console.log(data.response[0].cases.recovered);
+                    console.log(data.response[0].cases.total);
+                    console.log(data.response[0].deaths.total);
+                    console.log(data.response[0].tests.total);
+
+                    let result = data.response[0];
+
+                    document.querySelector('#activecases').innerHTML = result.cases.active;
+                    document.querySelector('#newcases').innerHTML = result.cases.new;
+                    document.querySelector('#recoveredcase').innerHTML = result.cases.recovered;
+                    document.querySelector('#totalcase').innerHTML = result.cases.total;
+                    document.querySelector('#totaldeaths').innerHTML = result.deaths.total;
+                    document.querySelector('#totaltest').innerHTML = result.tests.total;
+
+                })
+                .catch(error => console.log(error));
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>
